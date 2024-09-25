@@ -15,13 +15,52 @@
 в процессе установки вас может поджидать много сюрпризов. Будет здорово, если какие-нибудь пряморукие люди
 улучшат код в сторону его более простой распространяемости и напишут более человеческую документацию. 
 
+## ВСЁ ПРОВЕРЯЛОСЬ НА UBUNTU 22.04 jammy!!!
 ## Требования
 Нам понадобятся:
 
-  * php 5.5 или выше
+  * php 5.5 или выше (работает с php 5.6, инструкция по установке ниже)
   * phpшные модули: gd, pdo-pgsql, curl, memcache
-  * postgresql 9.1 или выше
+  * postgresql 9.1 или выше (работает с postgresql 9.4, инструкция по установке ниже)
   * memcached
+
+# Php 5.6 и postgresql 9.4
+## Php
+php 5.6 для ubuntu можно скачать так:
+
+ ```
+ $ sudo add-apt-repository ppa:ondrej/php
+ $ sudo apt update
+ $ sudo apt upgrade
+ $ sudo apt install -y php5.6
+ ```
+И сразу докачиваем fpm:
+ ```
+ $ sudo apt install -y php5.6-fpm
+ ```
+Для скачивание модулей пишем их по формуле `sudo apt install -y php5.6-MODULE-NAME`
+Пример:
+ ```
+ $ sudo apt install -y php5.6-curl
+ $ sudo apt install -y php5.6-gd
+ ```
+И тому подобное...
+
+## Postgresql
+posgresql 9.4 для ubuntu можно скачать так:
+ ```
+ sudo add-apt-repository "deb https://apt.postgresql.org/pub/repos/apt jammy-pgdg main"
+ ```
+ (В случае, если у вас не jammy - замените 'jammy-pgdg' на 'REP-VER-pgdg'. Версию репозитория можно узнать блягодаря `lsb_release -sc`)
+ ```
+ wget --quiet -O - https://postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
+ sudo apt-get update
+ sudo apt-get install postgresql-9.4
+ ```
+Также не забываем выключить apache2
+ ```
+ $ sudo service apache2 stop
+ ```
 
 ## Установка
 1. Клонируем репозиторий в какую-нибудь директорию, допустим, `/srv/notabenoid.com`
@@ -34,28 +73,36 @@
         nano /etc/nginx/sites-available/notabenoid.com
 
     Содержимое:
+    ```
+    events {
+        worker_connections  1024;
+    }
 
-        server {
-            server_name notabenoid.com;
-            listen 80;
-            root /srv/notabenoid.com/www;
-            index index.php;
-            location / {
-                try_files $uri $uri/ /index.php?$args;
-            }
-            location ~ \.php$ {
-                fastcgi_split_path_info ^(.+\.php)(/.+)$;
-                fastcgi_pass unix:/var/run/php5-fpm.sock;
-                fastcgi_param SCRIPT_FILENAME $request_filename;
-                fastcgi_index index.php;
-                include fastcgi_params;
-            }
-            location ~ ^/(assets|img|js|css) {
-                try_files $uri =404;
-            }
-        }
-
-    2.Включаем сайт, создаем ссылку на конфиг
+    http {
+     include mime.types;
+     server {
+         server_name notabenoid.com;
+         listen 80;
+         root /srv/notabenoid.com/www;
+         index index.php;
+         location / {
+             try_files $uri $uri/ /index.php?$args;
+         }
+         location ~ \.php$ {
+             fastcgi_split_path_info ^(.+\.php)(/.+)$;
+             fastcgi_pass unix:/var/run/php/php5.6-fpm.sock;
+             fastcgi_param SCRIPT_FILENAME $request_filename;
+             fastcgi_index index.php;
+             include fastcgi_params;
+         }
+         location ~ ^/(assets|img|js|css) {
+             try_files $uri =404;
+         }
+     }
+    }
+    ```
+### То же самое прописываем в /etc/nginx/nginx.conf!!!
+   2.Включаем сайт, создаем ссылку на конфи
 
         ln -s /etc/nginx/sites-available/notabenoid.com /etc/nginx/sites-enabled/
 
@@ -116,5 +163,7 @@
     логин в группах со спецправами в переменной `private static $roles` в файле `/protected/components/WebUser.php`.
     Полагаю, также будет мудро несколько подправить основной шаблон (`/protected/views/layouts/v3.php`) и морду
     (`/protected/views/site/index.php`).
+
+# В случае каких-либо проблем - готов вам помочь. Сам сталкивался, сам решал. https://t.me/manager_radar
    
 *чмг-лов, Митя Уйский.*
