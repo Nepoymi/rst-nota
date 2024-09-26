@@ -23,26 +23,27 @@
   * phpшные модули: gd, pdo-pgsql, curl, memcache
   * postgresql 9.1 или выше (работает с postgresql 9.4, инструкция по установке ниже)
   * memcached
+  * nginx
 
 # Php 5.6 и postgresql 9.4
 ## Php
 php 5.6 для ubuntu можно скачать так:
 
  ```
- $ sudo add-apt-repository ppa:ondrej/php
- $ sudo apt update
- $ sudo apt upgrade
- $ sudo apt install -y php5.6
+ sudo add-apt-repository ppa:ondrej/php
+ sudo apt update
+ sudo apt upgrade
+ sudo apt install -y php5.6
  ```
 И сразу докачиваем fpm:
  ```
- $ sudo apt install -y php5.6-fpm
+ sudo apt install -y php5.6-fpm
  ```
 Для скачивание модулей пишем их по формуле `sudo apt install -y php5.6-MODULE-NAME`
 Пример:
  ```
- $ sudo apt install -y php5.6-curl
- $ sudo apt install -y php5.6-gd
+ sudo apt install -y php5.6-curl
+ sudo apt install -y php5.6-gd
  ```
 И тому подобное...
 
@@ -59,7 +60,7 @@ posgresql 9.4 для ubuntu можно скачать так:
  ```
 Также не забываем выключить apache2
  ```
- $ sudo service apache2 stop
+ sudo service apache2 stop
  ```
 
 ## Установка
@@ -123,6 +124,12 @@ posgresql 9.4 для ubuntu можно скачать так:
 
         local   all  all trust
 
+    После этого нужно рестартнуть postgresql
+   
+        
+        sudo service postgresql restart
+  						
+
     Скармливаем дамп:
 
         psql -U notabenoid < /srv/notabenoid.com/init.sql
@@ -134,7 +141,7 @@ posgresql 9.4 для ubuntu можно скачать так:
         # alter role notabenoid with superuser;
         # \q
 
-5. Настало время охуительных конфигов! В /protected/config/main.php найдите строки
+6. Настало время охуительных конфигов! В /protected/config/main.php найдите строки
 
         "connectionString" => "pgsql:host=localhost;dbname=notabenoid",
         "username" => "notabenoid",
@@ -152,7 +159,7 @@ posgresql 9.4 для ubuntu можно скачать так:
     адреса, которые будут стоять в поле "From" всякого спама, который рассылает сайт. Аналогичный трюк надобно
     провести с файлом `/protected/config/console.php`
 
-6. В крон прописываем:
+7. В крон прописываем:
 
         0 0 * * * /usr/bin/php /srv/notabenoid.com/protected/yiic maintain midnight
         0 4 * * * /usr/bin/php /srv/notabenoid.com/protected/yiic maintain dailyfixes
@@ -160,7 +167,7 @@ posgresql 9.4 для ubuntu можно скачать так:
     и последнюю команду (`/usr/bin/php /srv/notabenoid.com/protected/yiic maintain dailyfixes`) непременно
     исполняем сами.
 
-7. Теперь, по идее, вся эта херня должна взлететь. Зарегистрируйте первого пользователя и пропишите его
+8. Теперь, по идее, вся эта херня должна взлететь. Зарегистрируйте первого пользователя и пропишите его
     логин в группах со спецправами в переменной `private static $roles` в файле `/protected/components/WebUser.php`.
     Полагаю, также будет мудро несколько подправить основной шаблон (`/protected/views/layouts/v3.php`) и морду
     (`/protected/views/site/index.php`).
