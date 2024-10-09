@@ -315,7 +315,7 @@ class User extends CActiveRecord {
 	}
 
 	public function getUpicUrl() {
-		if($this->upic[0] == 0) return "/i/avatar_placeholder.png";
+		if($this->upic[0] == 0) return "/i/avatar_placeholder_old.png";
 		return "/i/upic/" . floor($this->id / 1000) . "/" . $this->upicName . ".jpg";
 	}
 
