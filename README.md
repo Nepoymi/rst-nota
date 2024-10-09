@@ -20,7 +20,7 @@
 Нам понадобятся:
 
   * php 5.5 или выше (работает с php 5.6, инструкция по установке ниже)
-  * phpшные модули: gd, pdo-pgsql, curl, memcache
+  * phpшные модули: gd, pdo-pgsql, curl, memcache, mbstring, xml
   * postgresql 9.1 или выше (работает с postgresql 9.4, инструкция по установке ниже)
   * memcached
   * nginx
@@ -46,6 +46,8 @@ php 5.6 для ubuntu можно скачать так:
  sudo apt install -y php5.6-gd
  ```
 И тому подобное...
+
+p.s. при каждом рестарте nginx-а нужно давать доступ к файлу /run/php/php5.6-fpm.sock; я не знаю почему, может это у меня одного решения ещё не нашёл
 
 ## Postgresql
 posgresql 9.4 для ubuntu можно скачать так:
