@@ -39,8 +39,7 @@ Yii::app()->bootstrap->registerModal();
 <header>
     <div class="<?= $containerClass; ?>" style="background-color:#fff;">
         <a href="/" id="header-logo">
-            <img src="/i/logo.png" width="124" height="130"
-                 style="padding-top: 50px;"
+            <img src="/i/logo.jpg" width="120" height="120"
                  alt="<?= CHtml::encode(Yii::app()->name); ?>"
                  title="<?= appParams()["version"]; ?>"/>
         </a>
