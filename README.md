@@ -116,6 +116,7 @@ posgresql 9.4 для ubuntu можно скачать так:
     * /www/i/upic
     * /www/i/tmp
     * /protected/runtime
+(по примеру "sudo chmod -R 777 /srv/notabenoid.com/www/assets")
 
 4. Создаём в постгресе базу, юзера и скармливаем дамп:
 
