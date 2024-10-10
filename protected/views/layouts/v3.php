@@ -198,7 +198,7 @@ $pattern = implode('|', array_map(function ($val) {return "($val)";}, $excluded_
 $matches = [];
 preg_match("/{$pattern}/", Yii::app()->request->requestUri, $matches);
 if (count($matches) == 0) : ?>
-<script src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML&locale=ru"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML&locale=ru"></script>
 <script type="text/x-mathjax-config">
     MathJax.Hub.Config({
         tex2jax: {
