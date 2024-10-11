@@ -1,0 +1,22 @@
+были ошибки на станицах из-за этих переменных, я не знаю, как это сработало, но заменив их на 0 всё заработало. Вот что я менял:
+
+file: /srv/notabenoid.com/protected/controllers/OrigController.php: 266
+ORIGINAL:	if(!isset($_POST["Orig"])) $orig->initNew((int) $_GET["after"]);
+
+RE-MADE:	if (defined("after")){
+			if(!isset($_POST["Orig"])) $orig->initNew((int) $_GET["after"]);
+		} 
+		else {
+			if(!isset($_POST["Orig"])) $orig->initNew(0);
+		}
+
+
+file: /srv/notabenoid.com/protected/controllers/AnnouncesController.php: 59
+ORIGINAL:	$topic = (int) $_GET["topic"];
+
+RE-MADE:	if (defined("topic")){	
+			$topic = (int) $_GET("topic");
+		}
+		else {
+			$topic = 0;
+		}	
