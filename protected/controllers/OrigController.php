@@ -263,7 +263,12 @@ class OrigController extends Controller {
 			$orig = new Orig();
 			$orig->chap_id = $chap->id;
 			$orig->chap = $chap;
-			if(!isset($_POST["Orig"])) $orig->initNew((int) $_GET["after"]);
+			if (defined("after")){
+				if(!isset($_POST["Orig"])) $orig->initNew((int) $_GET["after"]);
+			} 
+			else {
+				if(!isset($_POST["Orig"])) $orig->initNew(0);
+			}
 
 		} else {
 			$orig = Orig::model()->findByPk((int) $orig_id, array("condition" => "chap_id = :chap_id", "params" => array(":chap_id" => $chap->id)));
