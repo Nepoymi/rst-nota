@@ -16,7 +16,7 @@ file: /srv/notabenoid.com/protected/controllers/AnnouncesController.php: 59
 ORIGINAL:	$topic = (int) $_GET["topic"];
 
 RE-MADE:	if (defined("topic")){	
-			$topic = (int) $_GET("topic");
+			$topic = (int) $_GET["topic"];
 		}
 		else {
 			$topic = 0;
