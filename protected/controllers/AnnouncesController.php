@@ -56,8 +56,12 @@ class AnnouncesController extends BookBaseController {
 	}
 
 	public function actionRss() {
-		$topic = (int) $_GET["topic"];
-
+		if (defined("topic")){	
+			$topic = (int) $_GET("topic");
+		}
+		else {
+			$topic = 0;
+		}		
 		$announces = Announce::model()->with("book")->findAll(array(
 			"condition" => isset(Yii::app()->params["blog_topics"]["announce"][$topic]) ? "t.topics = '{$topic}'" : "t.topics BETWEEN 80 AND 89 AND book.ac_read = 'a'",
 			"order" => "t.cdate desc",
